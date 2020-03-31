@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/hepeng-blog.jpeg?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/hepeng-blog.jpeg?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="javascript,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="首先他们基于的规范就不同，module.exports、exports、require是基于CommonJS的模块规范，export、export default 、import是基于es6摸板规范的。node中的module.exports、exports、requireNode应用由模块组成，采用CommonJS模块规范，在Node.js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在">
+<meta name="keywords" content="javascript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="module.exports、exports、require和export、export default、import之前的区别与不同">
+<meta property="og:url" content="http://yoursite.com/2019/03/10/module.exports、exports、require和export、export default、import之前的区别与不同/index.html">
+<meta property="og:site_name" content="Hepeng">
+<meta property="og:description" content="首先他们基于的规范就不同，module.exports、exports、require是基于CommonJS的模块规范，export、export default 、import是基于es6摸板规范的。node中的module.exports、exports、requireNode应用由模块组成，采用CommonJS模块规范，在Node.js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-03-10T06:37:46.419Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="module.exports、exports、require和export、export default、import之前的区别与不同">
+<meta name="twitter:description" content="首先他们基于的规范就不同，module.exports、exports、require是基于CommonJS的模块规范，export、export default 、import是基于es6摸板规范的。node中的module.exports、exports、requireNode应用由模块组成，采用CommonJS模块规范，在Node.js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/10/module.exports、exports、require和export、export default、import之前的区别与不同/">
+
+
+
+
+
+  <title>module.exports、exports、require和export、export default、import之前的区别与不同 | Hepeng</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+    <a href="https://github.com/Jeciky" rel="external nofollow noopener noreferrer" target="_blank"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hepeng</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/10/module.exports、exports、require和export、export default、import之前的区别与不同/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hepeng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hepeng">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">module.exports、exports、require和export、export default、import之前的区别与不同</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-10T14:33:43+08:00">
+                2019-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/javascript/" itemprop="url" rel="index">
+                    <span itemprop="name">javascript</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="首先他们基于的规范就不同，module-exports、exports、require是基于CommonJS的模块规范，export、export-default-、import是基于es6摸板规范的。"><a href="#首先他们基于的规范就不同，module-exports、exports、require是基于CommonJS的模块规范，export、export-default-、import是基于es6摸板规范的。" class="headerlink" title="首先他们基于的规范就不同，module.exports、exports、require是基于CommonJS的模块规范，export、export default 、import是基于es6摸板规范的。"></a>首先他们基于的规范就不同，module.exports、exports、require是基于CommonJS的模块规范，export、export default 、import是基于es6摸板规范的。</h3><h3 id="node中的module-exports、exports、require"><a href="#node中的module-exports、exports、require" class="headerlink" title="node中的module.exports、exports、require"></a>node中的module.exports、exports、require</h3><h5 id="Node应用由模块组成，采用CommonJS模块规范，在Node-js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在一个文件里面定义的变量、函数、类相对于其他文件来说都是私有的，其他文件不可见。"><a href="#Node应用由模块组成，采用CommonJS模块规范，在Node-js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在一个文件里面定义的变量、函数、类相对于其他文件来说都是私有的，其他文件不可见。" class="headerlink" title="Node应用由模块组成，采用CommonJS模块规范，在Node.js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在一个文件里面定义的变量、函数、类相对于其他文件来说都是私有的，其他文件不可见。"></a>Node应用由模块组成，采用CommonJS模块规范，在Node.js模块系统中，每个文件都视为独立的模块，拥有自己作用域，在一个文件里面定义的变量、函数、类相对于其他文件来说都是私有的，其他文件不可见。</h5><h5 id="对于上面的特性当我们就需要引用其他模块里类、函数、变量或者输出当前模块的类、函数、变量来让模块互相连接起来的时，就需要用到module-exports、exports、require。"><a href="#对于上面的特性当我们就需要引用其他模块里类、函数、变量或者输出当前模块的类、函数、变量来让模块互相连接起来的时，就需要用到module-exports、exports、require。" class="headerlink" title="对于上面的特性当我们就需要引用其他模块里类、函数、变量或者输出当前模块的类、函数、变量来让模块互相连接起来的时，就需要用到module.exports、exports、require。"></a>对于上面的特性当我们就需要引用其他模块里类、函数、变量或者输出当前模块的类、函数、变量来让模块互相连接起来的时，就需要用到module.exports、exports、require。</h5><h5 id="require：用于引入模块、JSON、或本地文件。遵循以下规则："><a href="#require：用于引入模块、JSON、或本地文件。遵循以下规则：" class="headerlink" title="require：用于引入模块、JSON、或本地文件。遵循以下规则："></a>require：用于引入模块、JSON、或本地文件。遵循以下规则：</h5><p> 以 ‘/‘ 为前缀的模板文件是绝对路径。<br> 以 ‘./ ‘ 为前缀的模板是相对路径，相对于调用require的文件 。<br> 当没有 ‘/‘ 、’./‘  、’../‘ 开头来表示文件的时候，这个模块必须是核心模块或加载自node_modules目录<br> 例如我们在开发中，用require(‘模块名’) 来加载某个模块时。这个时候会自动去node_modules目录中去找该模块的文件夹，那么他是怎么找到的，细心的同学可能会发觉，我们通过npm安装依赖的包都有个package.json文件，里面都有name和main属性，这个name：你要加载的文件名,main：这个包或者模块对应的主要文件，或者入口文件。当我们需要将一个目录作为模块时，可以在这个目录下新建package.json文件，并制定main模块。</p>
+<h5 id="module-exports与exports-用于指定一个模块导出的内容。module-export的赋值必须是立即完成的，不能在任何回调中完成。"><a href="#module-exports与exports-用于指定一个模块导出的内容。module-export的赋值必须是立即完成的，不能在任何回调中完成。" class="headerlink" title="module.exports与exports:用于指定一个模块导出的内容。module.export的赋值必须是立即完成的，不能在任何回调中完成。"></a>module.exports与exports:用于指定一个模块导出的内容。module.export的赋值必须是立即完成的，不能在任何回调中完成。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">module.exports=&#123;</span><br><span class="line">    a:/*方法a的主要代码*/，</span><br><span class="line">    b:/*方法b的主要代码*/</span><br><span class="line"> &#125;</span><br><span class="line"> module.exports.a=/*a方法的主要代码*/</span><br><span class="line"> exports.a=/*a方法的主要代码*/</span><br></pre></td></tr></table></figure>
+<h5 id="module-exports与exports的不同：exports是module-exports的快捷方式，既exports-module-exports。"><a href="#module-exports与exports的不同：exports是module-exports的快捷方式，既exports-module-exports。" class="headerlink" title="module.exports与exports的不同：exports是module.exports的快捷方式，既exports=module.exports。"></a>module.exports与exports的不同：exports是module.exports的快捷方式，既exports=module.exports。</h5><p>运用exports导出的方法会在模板执行之前赋值给module.exports，如果exports赋值呢新值，则他将不再绑定到module.exports,可以根据下面的这个例子进一步理解</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">let a=&#123;&#125;,let b;</span><br><span class="line">b=a;</span><br><span class="line">b=&#123;&#125;;//这时b与a就失去呢联系</span><br></pre></td></tr></table></figure>
+<h3 id="ES6中的export、export-default、import"><a href="#ES6中的export、export-default、import" class="headerlink" title="ES6中的export、export.default、import"></a>ES6中的export、export.default、import</h3><h5 id="exoport、export-default、import是在ESMA6中提出的javascript模块体系，使得程序在编译时就能确认模块间的依赖关系，以及输入和输出变量。"><a href="#exoport、export-default、import是在ESMA6中提出的javascript模块体系，使得程序在编译时就能确认模块间的依赖关系，以及输入和输出变量。" class="headerlink" title="exoport、export.default、import是在ESMA6中提出的javascript模块体系，使得程序在编译时就能确认模块间的依赖关系，以及输入和输出变量。"></a>exoport、export.default、import是在ESMA6中提出的javascript模块体系，使得程序在编译时就能确认模块间的依赖关系，以及输入和输出变量。</h5><p>export:用于规范模块的对外接口，一个模块就是一个独立的文件，外部无法获取，需要通过export输出变量或者方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var name=&apos;hepeng1&apos;;</span><br><span class="line">var age=&apos;19&apos;;</span><br><span class="line">export &#123;name,age&#125;</span><br></pre></td></tr></table></figure>
+<p>++注意：export命令规定的是对外的接口，必须与模板内部的变量建立一 一对应关系。++</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">//写法一</span><br><span class="line">export var name=&apos;hepeng&apos;;</span><br><span class="line">//写法二</span><br><span class="line">var name=&apos;hepeng&apos;;</span><br><span class="line">export &#123; name &#125;;</span><br><span class="line">//写法三</span><br><span class="line">var name=&apos;hepeng&apos;;</span><br><span class="line">export &#123;name as name1&#125;</span><br></pre></td></tr></table></figure>
+<p>与node的输出不同的是，export语句输出的接口，与其对应的值是动态绑定关系,既通过该接口，可以取到模板内部实时的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">// lib.js</span><br><span class="line">export var num=1;</span><br><span class="line">setTimeout(function()&#123;</span><br><span class="line">num=2;</span><br><span class="line">&#125;,1000)</span><br><span class="line">import num from &quot;./lib.js&quot;;</span><br><span class="line">console.log(num)  //1;  1秒后会变成2</span><br></pre></td></tr></table></figure>
+<h5 id="import-使用export命令定义的模板对外接口，通过import命令加载这个模块。"><a href="#import-使用export命令定义的模板对外接口，通过import命令加载这个模块。" class="headerlink" title="import:使用export命令定义的模板对外接口，通过import命令加载这个模块。"></a>import:使用export命令定义的模板对外接口，通过import命令加载这个模块。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import &#123;name&#125; from &apos;a.js&apos; // 大括号的变量名必须与被导入模块对外接口的名称相同。</span><br><span class="line">import &#123;name1 as name&#125; from &apos;a.js&apos; //将导出的变量名重新命名</span><br><span class="line">import  * as json from &apos;a.js&apos; //将a文件所有导出的东西赋值给json对象</span><br></pre></td></tr></table></figure>
+<h5 id="import的特性："><a href="#import的特性：" class="headerlink" title="import的特性："></a>import的特性：</h5><p>1：import是静态执行，所以不能使用表达式和变量，这些只能在运行时才能得到结果的语法结构。<br>2：import语句会自动提升到整个模块的头部，首先执行。<br>3：import命令输入的变量是只读的。<br>4：多次导入同一个模块只执行一次。</p>
+<blockquote>
+<p>export default ：为模块指定默认输出</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">//a.js</span><br><span class="line">export default let a=&apos;aaa&apos;;</span><br><span class="line">//b.js</span><br><span class="line">import mes from &apos;./a.js&apos;</span><br><span class="line">console.log(mes);</span><br></pre></td></tr></table></figure>
+<p>注：export default  在一个模块中只能出现一次。</p>
+<p>export 与export default组合</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//a.js</span><br><span class="line">export function aFn()&#123;/*主体代码*/&#125;;</span><br><span class="line">export default let messJson=&#123;name:&apos;hepeng&apos;,age:&apos;18&apos;&#125;;</span><br><span class="line">export let a=&apos;aaa&apos;;</span><br><span class="line">//b.js</span><br><span class="line">import data,&#123;aFn,a&#125; from &apos;./b.js&apos;;</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>通过上面的对比和介绍ES6模块与CommonJS模块的差异<br>1：CommonJS模块输出的值是值得拷贝，ES6模块输出的是值得引用。<br>2：CommonJS在运行时加载，ES6模块在编译的时输出接口</strong>。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/javascript/" rel="tag"># javascript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/01/07/Object-create-详解/" rel="next" title="Object.create()详解">
+                <i class="fa fa-chevron-left"></i> Object.create()详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/11/vue中组件通讯/" rel="prev" title="vue中组件通讯">
+                vue中组件通讯 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hepeng</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hepeng</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io" rel="external nofollow noopener noreferrer">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next" rel="external nofollow noopener noreferrer">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
